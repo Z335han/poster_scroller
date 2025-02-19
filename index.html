@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Scroller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .scroller-container {
+            width: 90%;
+            max-width: 600px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 20px;
+        }
+        .scroller {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .image-heading {
+            font-size: 20px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transform: translateY(-50%);
+        }
+        button {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        @media (max-width: 600px) {
+            .buttons button {
+                padding: 8px;
+                font-size: 16px;
+            }
+            .image-heading {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>APPLES POSTERS 2024-25</h1>  <!-- Static Page Heading -->
+    
+    <div class="scroller-container">
+        <div class="scroller" id="scroller"></div>
+        <div class="buttons">
+            <button onclick="prevSlide()">&#10094;</button>
+            <button onclick="nextSlide()">&#10095;</button>
+        </div>
+    </div>
+
+    <h2 id="dynamic-heading" class="image-heading"></h2>  <!-- Dynamic Heading Below Image -->
+
+    <script>
+        let index = 0;
+       const imageFolder = 'images/';  
+		<!-- const imageFolder = 'file:///C:/Users/jeesh/Desktop/New%20folder/images/';-->
+        
+        // Array of 40 images (named "image1.png" to "image40.png")
+        const images = Array.from({ length: 40 }, (_, i) => `image${i + 1}.png`);
+
+        // Custom image headings
+        const imageHeadings = {
+            "image1.png": "Welcome to Toastmasters!",
+            "image2.png": "Leadership in Action",
+            "image3.png": "Public Speaking Excellence",
+            "image4.png": "Confidence Booster",
+            "image5.png": "Communication Skills Mastery",
+            "image6.png": "Networking Opportunities",
+            "image7.png": "Speak Like a Pro",
+            "image8.png": "Overcome Stage Fear",
+            "image9.png": "Inspiring Future Leaders",
+            "image10.png": "Art of Storytelling",
+            "image11.png": "Master the Mic",
+            "image12.png": "Building Stronger Connections",
+            "image13.png": "Elevate Your Career",
+            "image14.png": "Join the Speech Challenge",
+            "image15.png": "Be a Confident Speaker",
+            "image16.png": "Unlock Your Potential",
+            "image17.png": "Step into Leadership",
+            "image18.png": "Voice Your Ideas",
+            "image19.png": "Public Speaking Made Easy",
+            "image20.png": "Speak with Passion",
+            "image21.png": "Practice Makes Perfect",
+            "image22.png": "Master Impromptu Speaking",
+            "image23.png": "Speechcraft at Its Best",
+            "image24.png": "The Power of Persuasion",
+            "image25.png": "Think Fast, Speak Smart",
+            "image26.png": "Speak to Inspire",
+            "image27.png": "Break Your Comfort Zone",
+            "image28.png": "Elevator Pitch Skills",
+            "image29.png": "Craft Memorable Speeches",
+            "image30.png": "Speak Up, Stand Out",
+            "image31.png": "Present Like a Pro",
+            "image32.png": "Your Voice Matters",
+            "image33.png": "Speak with Confidence",
+            "image34.png": "From Nervous to Natural",
+            "image35.png": "Mastering Body Language",
+            "image36.png": "Persuasive Speaking",
+            "image37.png": "Ace Your Next Presentation",
+            "image38.png": "Captivate Your Audience",
+            "image39.png": "Lead with Words",
+            "image40.png": "Be the Speaker You Admire"
+        };
+
+        function loadImages() {
+            const scroller = document.getElementById("scroller");
+            scroller.innerHTML = "";
+            images.forEach(image => {
+                let slide = document.createElement("div");
+                slide.classList.add("slide");
+
+                let img = document.createElement("img");
+                img.src = imageFolder + image;
+                img.alt = imageHeadings[image] || "Toastmasters Poster";
+                img.onerror = () => { slide.style.display = "none"; }; // Hide slide if image is missing
+
+                slide.appendChild(img);
+                scroller.appendChild(slide);
+            });
+
+            updateHeading(); // Update the first heading
+        }
+
+        function showSlide() {
+            const scroller = document.querySelector(".scroller");
+            scroller.style.transform = `translateX(${-index * 100}%)`;
+            updateHeading();
+        }
+
+        function nextSlide() {
+            index = (index + 1) % images.length;
+            showSlide();
+        }
+
+        function prevSlide() {
+            index = (index - 1 + images.length) % images.length;
+            showSlide();
+        }
+
+        function updateHeading() {
+            const dynamicHeading = document.getElementById("dynamic-heading");
+            const currentImage = images[index];
+            dynamicHeading.textContent = imageHeadings[currentImage] || "Toastmasters Poster";
+        }
+
+        window.onload = loadImages;
+    </script>
+</body>
+</html>
